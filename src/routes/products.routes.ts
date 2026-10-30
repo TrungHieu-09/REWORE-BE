@@ -99,7 +99,7 @@ const productInclude = {
 router.get("/", optionalAuthenticate, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = Math.max(1, parseInt(String(req.query.page || 1)));
-    const limit = Math.min(50, parseInt(String(req.query.limit || 12)));
+    const limit = Math.min(100, parseInt(String(req.query.limit || 12)));
     const { category, condition, minPrice, maxPrice, search, sellerId, sortBy } = req.query;
     const requestedSellerId = sellerId ? String(sellerId) : undefined;
     const sellerAccess = req.user && requestedSellerId
@@ -113,7 +113,7 @@ router.get("/", optionalAuthenticate, async (req: Request, res: Response, next: 
     );
 
     const where: Prisma.ProductWhereInput = {
-      ...(canViewSellerInventory ? {} : { status: "ACTIVE" as const }),
+      ...(canViewSellerInventory ? {} : { status: { in: ["ACTIVE", "AUCTION"] } }),
       ...(category && { category: category as string }),
       ...(condition && { condition: condition as Prisma.EnumProductConditionFilter }),
       ...(requestedSellerId && { sellerId: requestedSellerId }),

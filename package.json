@@ -8,6 +8,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "seed": "tsx prisma/seed.ts",
+    "seed:luxury": "tsx prisma/seed-circular-luxury.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
